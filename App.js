@@ -13,6 +13,9 @@ const DropdownComponent = () => {
   const [country, setCountry] = useState(null);
   const [state, setState] = useState(null);
   const [city, setCity] = useState(null);
+  const [countryName, setCountryName] = useState(null);
+  const [stateName, setStateName] = useState(null);
+  const [cityName, setCityName] = useState(null);
   const [isFocus, setIsFocus] = useState(false);
   const [isFocus1, setIsFocus1] = useState(false);
   const [isFocus2, setIsFocus2] = useState(false);
@@ -23,7 +26,7 @@ const DropdownComponent = () => {
       method: 'get',
       url: 'https://api.countrystatecity.in/v1/countries',
       headers: {
-        'X-CSCAPI-KEY': 'API_KEY',
+        'X-CSCAPI-KEY': 'NEVpNDRDN2h4aE15ckN0dXNlVHNPeGJVSXlEazRqMDVvWndiVUlDbg==',
       },
     };
 
@@ -50,7 +53,7 @@ const DropdownComponent = () => {
       method: 'get',
       url: `https://api.countrystatecity.in/v1/countries/${countryCode}/states`,
       headers: {
-        'X-CSCAPI-KEY': 'API_KEY',
+        'X-CSCAPI-KEY': 'NEVpNDRDN2h4aE15ckN0dXNlVHNPeGJVSXlEazRqMDVvWndiVUlDbg==',
       },
     };
 
@@ -73,13 +76,13 @@ const DropdownComponent = () => {
   }, []);
 
   const handleCity = useCallback((countryCode, stateCode) => {
-    var axios = require('axios');
+    console.log(countryCode,stateCode,'aaaaaaa')
 
     var config = {
       method: 'get',
       url: `https://api.countrystatecity.in/v1/countries/${countryCode}/states/${stateCode}/cities`,
       headers: {
-        'X-CSCAPI-KEY': 'API_KEY',
+        'X-CSCAPI-KEY': 'NEVpNDRDN2h4aE15ckN0dXNlVHNPeGJVSXlEazRqMDVvWndiVUlDbg==',
       },
     };
 
@@ -90,7 +93,7 @@ const DropdownComponent = () => {
         let cityArray = [];
         for (let i = 0; i < count; i++) {
           cityArray.push({
-            value: response.data[i].iso2,
+            value: response.data[i].id,
             label: response.data[i].name,
           });
         }
@@ -124,6 +127,7 @@ const DropdownComponent = () => {
           onChange={item => {
             handleState(item.value);
             setCountry(item.value);
+            setCountryName(item.label)
             setIsFocus(false);
           }}
         />
@@ -145,8 +149,11 @@ const DropdownComponent = () => {
           onFocus={() => setIsFocus1(true)}
           onBlur={() => setIsFocus1(false)}
           onChange={item => {
+            console.log(country,'CountryAPi')
             handleCity(country,item.value);
             setState(item.value);
+            setStateName(item.label)
+
             setIsFocus1(false);
           }}
         />
@@ -169,10 +176,12 @@ const DropdownComponent = () => {
           onBlur={() => setIsFocus2(false)}
           onChange={item => {
             setCity(item.value);
+            setCityName(item.label)
+
             setIsFocus2(false);
           }}
         />
-      <TouchableOpacity onPress={()=>Alert.alert('you have selected country '+country,state,city)}>
+      <TouchableOpacity onPress={()=>Alert.alert(`you have selected country ${countryName+' '+stateName+ " " +cityName}`)}>
         <Text>Submit</Text>
       </TouchableOpacity>
       </View>
